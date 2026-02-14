@@ -1,0 +1,46 @@
+# --- Python / Django ---
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+env/
+.venv/
+venv/
+ENV/
+db.sqlite3
+db.sqlite3-journal
+*.log
+local_settings.py
+
+# --- Security & Environment (CRITICAL) ---
+.env
+.env.local
+.env.dev
+.env.prod
+.env.*
+!.env.example
+
+# --- IDEs / Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+
+# --- OS Specific ---
+Thumbs.db
+Desktop.ini
+.DS_Store
+.directory
+
+# --- Infrastructure / Build ---
+docker-compose.override.yml
+node_modules/
+dist/
+build/
+.cache/
+
+# --- Documentation ---
+site/
