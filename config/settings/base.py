@@ -25,6 +25,7 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',               
     'rest_framework_simplejwt.token_blacklist',
+    'drf_spectacular',
 ]
 
 LOCAL_APPS = [
@@ -94,6 +95,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
@@ -107,6 +109,14 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'QueueNow API',
+    'DESCRIPTION': 'Domain-driven Queue and Appointment Management System',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': True,
+    'COMPONENT_SPLIT_PATCH': True,
+    'COMPONENT_SPLIT_REQUEST': True,
+}
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
