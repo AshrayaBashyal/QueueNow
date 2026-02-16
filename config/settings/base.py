@@ -105,7 +105,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(
         days=int(os.getenv("REFRESH_TOKEN_LIFETIME_DAYS", 7))
     ),
-    "USER_ID_FIELD": "email",  
+    "USER_ID_FIELD": "id",  
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
