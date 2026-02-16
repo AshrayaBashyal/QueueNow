@@ -47,3 +47,19 @@ class Organization(models.Model):
             self.slug = slugify(self.slug)
             
         super().save(*args, **kwargs)
+
+
+
+class Membership(models.Model):
+    class Role(models.TextChoices):
+        ADMIN = "ADMIN", "Admin"
+        STAFF = "STAFF", "Staff"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, related_name="memberships")
+    role = models.CharField(max_length=10, choices=Role.choices, default=Role.STAFF)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "organization") 
