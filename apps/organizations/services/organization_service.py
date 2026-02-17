@@ -29,13 +29,9 @@ class OrganizationService:
         """
         Creates an organization and assigns the creator as the first ADMIN.
         Atomic transaction ensures we don't get an Org without an Admin.
-        """
-
-        unique_slug = OrganizationService._generate_unique_slug(name)
-        
+        """        
         organization = Organization.objects.create(
             name = name,
-            slug = unique_slug,
             created_by = creator,
             **extra_fields
         )        
