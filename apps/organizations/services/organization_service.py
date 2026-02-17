@@ -11,7 +11,9 @@ class OrganizationService:
         Creates a unique slug. 
         Example: 'My Bank' -> 'my-bank', then 'my-bank-1', 'my-bank-2'...
         """
-        base_slug = slugify(name)      
+        base_slug = slugify(name)  
+        if not base_slug:
+            base_slug = "org"       # Fallback for non-latin characters
         slug = base_slug
         counter = 1
 
