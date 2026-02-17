@@ -89,7 +89,7 @@ class Invite(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields = ["organization", "email"],
-                condition = models.Q(status=PENDING),
+                condition = models.Q(status="PENDING"),
                 name = 'unique_active_invite_per_org'
             )
         ]
