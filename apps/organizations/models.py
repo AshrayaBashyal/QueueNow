@@ -2,7 +2,6 @@ import uuid
 from django.db import models
 from django.db.models import Q
 from django.conf import settings
-from django.utils.text import slugify
 from core.utils.text_cleaners import collapse_spaces
 
 class Organization(models.Model):
@@ -38,10 +37,13 @@ class Organization(models.Model):
         if self.phone_number: 
             self.phone_number = collapse_spaces(self.phone_number)
         
+        from .services.organization_service import OrganizationService 
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = OrganizationService._generate_unique_slug(self.name)
         else:
-            self.slug = slugify(self.slug)
+            from django.utils.text import slugify
+            self.slug = slugify(self.slug)    
+
             
         super().save(*args, **kwargs)
 
