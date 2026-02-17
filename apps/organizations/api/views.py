@@ -4,12 +4,13 @@ from rest_framework.response import Response
 from .serializers import OrganizationCreateSerializer, OrganizationSerializer
 from ..models import Organization
 from ..services.organization_service import OrganizationService
+from .permissions import IsOrgAdminOrReadOnly
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
     lookup_field = 'slug'
     queryset = Organization.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOrgAdminOrReadOnly]
 
     def get_serializer_class(self):
         if self.action == "create":
