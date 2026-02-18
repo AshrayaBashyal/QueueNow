@@ -39,6 +39,7 @@ class InviteService:
 
 
     @staticmethod
+    @transaction.atomic
     def cancel_invite(*, invite, cancelled_by):
         """
         Logic: Only the original inviter OR the Org Admin can cancel a pending invite.
@@ -59,4 +60,30 @@ class InviteService:
             raise ValueError(f"Cannot cancel an invite that is already {invite.status.lower()}.")
 
         invite.status = Invite.Status.CANCELLED            
-        invite.save()
+        invite.save(update_fields=["status"])
+
+    @staticmethod
+    @transaction.atomic
+    def accept_invite(*, user, invite):
+        """
+        Accepts an invitation and joins the organization.
+        """
+        if invite.invitee != user or invite.email.lower() != user.email.lower():
+            raise PermissionError("This invitation was not issued to your account.")            
+
+        if invite.status != Invite.Status.PENDING:
+            raise ValueError("This invitation is no longer valid.")
+
+        if Membership.objects.filter(user=user, organization=invite.organization).exists():
+            raise ValueError("You are already a member of this organization.")
+            
+        membership = Membership.objects.create(
+        user=user,
+        organization=invite.organization,
+        role=invite.role
+    )    
+
+        invite.status = Invite.Status.ACCEPTED
+        invite.save(update_fields=["status"])
+
+        return membership
