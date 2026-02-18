@@ -87,3 +87,16 @@ class InviteService:
         invite.save(update_fields=["status"])
 
         return membership
+    
+
+    @staticmethod
+    @transaction.atomic
+    def reject_invite(*, user, invite):
+        if invite.invitee != user or invite.email.lower() != user.email.lower():
+            raise PermissionError("This invitation was not issued to your account.")
+
+        if invite.status != Invite.Status.PENDING:
+            raise ValueError(f"This invite is already {invite.status.lower()}")    
+
+        invite.status = Invite.Status.REJECTED
+        invite.save(update_fields=["status"])
