@@ -9,7 +9,7 @@ class InviteService:
     
     @staticmethod
     @transaction.atomic
-    def send_invites(organization, inviter, invitee_email=None, invitee_id=None, role=Membership.Role.STAFF):
+    def send_invites(*, organization, inviter, invitee_email=None, invitee_id=None, role=Membership.Role.STAFF):
 
         if not inviter.memberships.filter(organization=organization, role=Membership.Role.ADMIN).exists():
             raise PermissionError("Only ADMIN can send invite")
@@ -39,7 +39,7 @@ class InviteService:
 
 
     @staticmethod
-    def cancel_invite(invite, cancelled_by):
+    def cancel_invite(*, invite, cancelled_by):
         """
         Logic: Only the original inviter OR the Org Admin can cancel a pending invite.
         """
