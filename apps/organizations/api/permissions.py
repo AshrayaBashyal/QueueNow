@@ -10,7 +10,18 @@ class IsOrgAdminOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return obj.memberships.filter(
+        is_admin = obj.memberships.filter(
             user=request.user, 
             role=Membership.Role.ADMIN
         ).exists()
+
+        if is_admin:
+            return True
+        
+        if request.method in ["PUT", "PATCH"]:
+            return obj.memberships.filter(
+                user=request.user,
+                role=Membership.Role.STAFF
+            ).exists()
+            
+        return False
