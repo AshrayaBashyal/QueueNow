@@ -35,6 +35,6 @@ class OrganizationViewSet(viewsets.ModelViewSet):
         """
         Returns only organizations where the current user is a member.
         """
-        user_orgs = Organization.objects.filter(memberships__user = request.user)
+        user_orgs = Organization.objects.filter(memberships__user = request.user).prefetch_related('memberships')
         serializer = self.get_serializer(user_orgs, many=True)
         return Response(serializer.data)
