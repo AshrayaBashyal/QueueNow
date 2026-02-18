@@ -37,3 +37,26 @@ class InviteService:
             role=role
         )            
 
+
+    @staticmethod
+    def cancel_invite(invite, cancelled_by):
+        """
+        Logic: Only the original inviter OR the Org Admin can cancel a pending invite.
+        """
+        is_inviter = invite.invited_by == cancelled_by
+        
+        if not is_inviter:
+            is_admin = invite.organization.memberships.filter(
+                user=cancelled_by, 
+                role=Membership.Role.ADMIN
+            ).exists()
+            
+            if not is_admin:
+                raise PermissionError("Only the inviter or an admin can cancel this invite.")
+
+        # State check
+        if invite.status != Invite.Status.PENDING:
+            raise ValueError(f"Cannot cancel an invite that is already {invite.status.lower()}.")
+
+        invite.status = Invite.Status.CANCELLED            
+        invite.save()
