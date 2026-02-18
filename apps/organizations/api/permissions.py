@@ -23,5 +23,8 @@ class IsOrgAdminOrReadOnly(permissions.BasePermission):
                 user=request.user,
                 role=Membership.Role.STAFF
             ).exists()
-            
+
         return False
+    
+    
+    # using obj.memberships.filter twice, hitting the database twice for every edit request from a Staff member. Can fetch the role once, but for now, this code is very readable and safe.
